@@ -1,0 +1,13 @@
+echo The equation is look like: ax^2+ bx + c
+echo You have to submit a, b and c values here for knowing the root value of x
+echo ___________________________________________________________________________
+read -p "Enter the value of a:" a
+read -p "Enter the value of b:" b
+read -p "Enter the value of c:" c
+
+#now using two equation of x for finding the root value
+
+x1=$(echo "scale=2;((-1*$b)+(sqrt(($b*$b)-(4*$a*$c))))/(2*$a)" |bc)
+x2=$(echo "scale=2;((-1*$b)-(sqrt(($b*$b)-(4*$a*$c))))/(2*$a)" |bc)
+echo value of x1 = $x1
+echo value of x2 = $x2
