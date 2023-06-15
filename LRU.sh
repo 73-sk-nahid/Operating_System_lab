@@ -1,62 +1,86 @@
 #!/bin/bash
 
-pageFaultCount=0
-declare -a pages
-declare -a memory
-memoryIndex=0
+declare -a q p c c1 d f b c2
+k=0
+c=0
 
-printf "Enter number of pages: "
-read numberOfPages
+printf "Enter the number of pages: "
+read n
 
-printf "Enter the pages:\n"
-for ((i = 0; i < numberOfPages; i++))
-do
-    read pages[$i]
+printf "Enter the reference string: "
+for ((i=0; i<n; i++)); do
+    read p[i]
 done
 
-printf "Enter number of frames: "
-read numberOfFrames
+printf "Enter the number of frames: "
+read f
 
-for ((i = 0; i < numberOfFrames; i++))
-do
-    memory[$i]=-1
-done
+q[k]=${p[k]}
+printf "\nFor ${p[k]} : ${q[k]}\n"
+((c++))
+((k++))
 
-printf "The Page Replacement Process is -->\n"
-for ((i = 0; i < numberOfPages; i++))
-do
-    for ((j = 0; j < numberOfFrames; j++))
-    do
-        if [ ${memory[$j]} -eq ${pages[$i]} ]
-        then
-            break
+for ((i=1; i<n; i++)); do
+    c1=0
+
+    for ((j=0; j<f; j++)); do
+        if [[ ${p[i]} -ne ${q[j]} ]]; then
+            ((c1++))
         fi
     done
 
-    if [ $j -eq $numberOfFrames ]
-    then
-        memory[$memoryIndex]=${pages[$i]}
-        memoryIndex=$((memoryIndex+1))
-        pageFaultCount=$((pageFaultCount+1))
-    fi
+    if [[ c1 -eq f ]]; then
+        ((c++))
 
-    for ((k = 0; k < numberOfFrames; k++))
-    do
-        printf "\t%s" "${memory[$k]}"
-    done
+        if [[ k -lt f ]]; then
+            q[k]=${p[i]}
+            ((k++))
 
-    if [ $j -eq $numberOfFrames ]
-    then
-        printf "\tPage Fault No: %d" $pageFaultCount
-    fi
+            for ((j=0; j<k; j++)); do
+                printf "\t%s" "${q[j]}"
+            done
 
-    printf "\n"
+            printf "\n"
+        else
+            for ((r=0; r<f; r++)); do
+                c2[r]=0
 
-    if [ $memoryIndex -eq $numberOfFrames ]
-    then
-        memoryIndex=0
+                for ((j=i-1; j<n; j--)); do
+                    if [[ ${q[r]} -ne ${p[j]} ]]; then
+                        ((c2[r]++))
+                    else
+                        break
+                    fi
+                done
+            done
+
+            for ((r=0; r<f; r++)); do
+                b[r]=${c2[r]}
+            done
+
+            for ((r=0; r<f; r++)); do
+                for ((j=r; j<f; j++)); do
+                    if [[ ${b[r]} -lt ${b[j]} ]]; then
+                        t=${b[r]}
+                        b[r]=${b[j]}
+                        b[j]=$t
+                    fi
+                done
+            done
+
+            for ((r=0; r<f; r++)); do
+                if [[ ${c2[r]} -eq ${b[0]} ]]; then
+                    q[r]=${p[i]}
+                fi
+
+                printf "\t%s" "${q[r]}"
+            done
+
+            printf "\n"
+        fi
+    else
+        printf "For ${p[i]} :No page fault!\n"
     fi
 done
 
-printf "The number of Page Faults using FIFO is: %d\n" $pageFaultCount
-
+printf "\nTotal number of page faults using LRU: %d\n" "$c"
