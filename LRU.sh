@@ -7,8 +7,10 @@ c=0
 printf "Enter the number of pages: "
 read n
 
-printf "Enter the reference string: "
-for ((i=0; i<n; i++)); do
+printf "Enter the reference string: \n"
+for ((i=0; i<n; i++))
+do
+    printf "String %d: " "$i"
     read p[i]
 done
 
@@ -20,33 +22,42 @@ printf "\nFor ${p[k]} : ${q[k]}\n"
 ((c++))
 ((k++))
 
-for ((i=1; i<n; i++)); do
+for ((i=1; i<n; i++))
+do
     c1=0
 
-    for ((j=0; j<f; j++)); do
-        if [[ ${p[i]} -ne ${q[j]} ]]; then
+    for ((j=0; j<f; j++))
+    do
+        if [[ ${p[i]} -ne ${q[j]} ]]
+        then
             ((c1++))
         fi
     done
 
-    if [[ c1 -eq f ]]; then
+    if [[ c1 -eq f ]]
+    then
         ((c++))
 
-        if [[ k -lt f ]]; then
+        if [[ k -lt f ]]
+        then
             q[k]=${p[i]}
             ((k++))
 
-            for ((j=0; j<k; j++)); do
+            for ((j=0; j<k; j++))
+            do
                 printf "\t%s" "${q[j]}"
             done
 
             printf "\n"
         else
-            for ((r=0; r<f; r++)); do
+            for ((r=0; r<f; r++))
+            do
                 c2[r]=0
 
-                for ((j=i-1; j<n; j--)); do
-                    if [[ ${q[r]} -ne ${p[j]} ]]; then
+                for ((j=i-1; j<n; j--))
+                do
+                    if [[ ${q[r]} -ne ${p[j]} ]]
+                    then
                         ((c2[r]++))
                     else
                         break
@@ -54,13 +65,17 @@ for ((i=1; i<n; i++)); do
                 done
             done
 
-            for ((r=0; r<f; r++)); do
+            for ((r=0; r<f; r++))
+            do
                 b[r]=${c2[r]}
             done
 
-            for ((r=0; r<f; r++)); do
-                for ((j=r; j<f; j++)); do
-                    if [[ ${b[r]} -lt ${b[j]} ]]; then
+            for ((r=0; r<f; r++))
+            do
+                for ((j=r; j<f; j++))
+                do
+                    if [[ ${b[r]} -lt ${b[j]} ]]
+                    then
                         t=${b[r]}
                         b[r]=${b[j]}
                         b[j]=$t
@@ -68,8 +83,10 @@ for ((i=1; i<n; i++)); do
                 done
             done
 
-            for ((r=0; r<f; r++)); do
-                if [[ ${c2[r]} -eq ${b[0]} ]]; then
+            for ((r=0; r<f; r++))
+            do
+                if [[ ${c2[r]} -eq ${b[0]} ]]
+                then
                     q[r]=${p[i]}
                 fi
 
